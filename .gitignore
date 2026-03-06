@@ -1,4 +1,5 @@
-logs/
-agents/*.pid
-config.env
 .DS_Store
+config.env
+agents/*.pid
+# logs/ is NOT ignored here so agents can read them for dashboarding
+# however, the GitAgent is configured via GEMINI.md to NOT commit logs
