@@ -17,5 +17,5 @@
 3. **Skill Adherence**: When using a skill, strictly follow the execution pattern defined in its `SKILL.md`.
 
 ## Lifecycle
-- **The Hub**: Orchestrates the spinning up of agents using their configuration.
+- **The Rover**: Orchestrates the spinning up of agents using their configuration.
 - **The Diary Agent**: The first agent in the system, responsible for logging all events.

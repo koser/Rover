@@ -12,4 +12,5 @@ Provides a standardized interface for agents to record events, changes, and syst
 ## Execution Pattern
 1. Validate the log file exists; create if missing.
 2. Format: `[YYYY-MM-DD HH:MM:SS] [AGENT_NAME] [EVENT_TYPE] [STATUS]: DESCRIPTION`
-3. Append to the end of the log file.
+3. Append to the end of `~/AgentService/logs/diary.log`.
+4. **Alerting**: If the `status` is `ERROR` or `WARNING`, also append the formatted entry to `~/AgentService/logs/ALERTS.log`.
