@@ -87,16 +87,20 @@ def handle_app_mentions(body, say, logger):
         log_event("USER_REQUEST", f"Created task {task_filename} from {user_id}: \"{clean_text}\"", "SUCCESS")
 
         # EXECUTE: Hand off the task directly to the 'gemini' binary as the Rover Agent
-        # We read the Rover.config to provide the persona context
+        # We read the Rover.config and GEMINI.md to provide full context
         with open(ROVER_CONFIG_PATH, 'r') as f:
             rover_config = f.read()
+        
+        gemini_md_path = os.path.join(BASE_DIR, "GEMINI.md")
+        with open(gemini_md_path, 'r') as f:
+            gemini_md = f.read()
         
         # Combine persona, project context, and the specific instruction
         # Note: We're running it in yolo mode for autonomous execution
         gemini_cmd = [
             GEMINI_PATH,
             "--yolo",
-            f"You are the Rover Agent. Config: {rover_config}. Instruction: {clean_text}"
+            f"System Context: {gemini_md}. Your Config: {rover_config}. Instruction: {clean_text}"
         ]
 
         # Log the start of execution
