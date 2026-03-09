@@ -1,5 +1,11 @@
 .DS_Store
 config.env
 agents/*.pid
+node_modules/
+venv/
+.slack_last_ts
+logs/*.log
+client_secret.json
+projects/*/logs/
 # logs/ is NOT ignored here so agents can read them for dashboarding
 # however, the GitAgent is configured via GEMINI.md to NOT commit logs

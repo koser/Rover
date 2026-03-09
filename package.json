@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "dotenv": "^17.3.1"
+  },
+  "name": "agentservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "slack_listener.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koser/Rover.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/koser/Rover/issues"
+  },
+  "homepage": "https://github.com/koser/Rover#readme"
+}

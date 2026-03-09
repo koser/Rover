@@ -1,0 +1,23 @@
+# HOW TO START: AgentService (Supervised Mode)
+
+AgentService is a framework of autonomous AI agents. This system is configured to run ONLY as long as your terminal window is open.
+
+## 1. Prerequisites
+- Gemini CLI must be installed at `/opt/homebrew/bin/gemini`.
+- You must have a valid `config.env` file.
+
+## 2. Launching the System
+To start all agents, run:
+    ./StartRover.sh
+
+IMPORTANT: This script will stay in the foreground. 
+- If you close the terminal window, all agents will shut down.
+- If you press Ctrl+C, all agents will shut down.
+
+## 3. Monitoring the System
+While `StartRover.sh` is running, you can open a SECOND terminal window to track the logs:
+- tail -f logs/heartbeat.log: Shows when agents wake up (every 2 minutes).
+- tail -f logs/diary.log: The master record of all system events.
+
+## 4. Stopping the System
+Simply press Ctrl+C in the terminal where you ran `./StartRover.sh`, or just close the window. The system will automatically clean up all background processes for you.
