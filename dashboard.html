@@ -83,7 +83,7 @@
         input:checked + .slider { background-color: var(--primary-blue); }
         input:checked + .slider:before { transform: translateX(26px); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .card { background: var(--card-bg); border-radius: 8px; box-shadow: var(--shadow); padding: 20px; border-top: 5px solid var(--primary-blue); transition: background-color 0.3s, box-shadow 0.3s; }
         .card.success { border-top-color: #27ae60; }
         .card.warning { border-top-color: #f39c12; }
@@ -160,11 +160,27 @@
             </div>
             <div class="metric">
                 <label>Last Seen</label>
-                <span>2026-03-09 16:51:00</span>
+                <span>2026-03-09 16:54:31</span>
             </div>
             <div class="metric">
                 <label>Current Mission</label>
                 <span>Monitor health and connectivity.</span>
+            </div>
+        </div>
+
+        <div class="card success">
+            <h2>Rover</h2>
+            <div class="metric">
+                <label>Status</label>
+                <span class="status active">Active</span>
+            </div>
+            <div class="metric">
+                <label>Last Seen</label>
+                <span>2026-03-09 16:53:40</span>
+            </div>
+            <div class="metric">
+                <label>Current Mission</label>
+                <span>Fulfill operator instructions.</span>
             </div>
         </div>
 
@@ -176,27 +192,11 @@
             </div>
             <div class="metric">
                 <label>Last Seen</label>
-                <span>2026-03-09 16:50:27</span>
+                <span>2026-03-09 16:53:32</span>
             </div>
             <div class="metric">
                 <label>Current Mission</label>
                 <span>Maintain GitHub backup.</span>
-            </div>
-        </div>
-
-        <div class="card success">
-            <h2>Diary</h2>
-            <div class="metric">
-                <label>Status</label>
-                <span class="status active">Active</span>
-            </div>
-            <div class="metric">
-                <label>Last Seen</label>
-                <span>2026-03-09 16:50:30</span>
-            </div>
-            <div class="metric">
-                <label>Current Mission</label>
-                <span>Meticulous system chronicle.</span>
             </div>
         </div>
 
@@ -208,11 +208,27 @@
             </div>
             <div class="metric">
                 <label>Last Seen</label>
-                <span>2026-03-09 16:49:52</span>
+                <span>2026-03-09 16:53:40</span>
             </div>
             <div class="metric">
                 <label>Current Mission</label>
                 <span>Bridge Slack to Backend.</span>
+            </div>
+        </div>
+
+        <div class="card success">
+            <h2>Diary</h2>
+            <div class="metric">
+                <label>Status</label>
+                <span class="status active">Active</span>
+            </div>
+            <div class="metric">
+                <label>Last Seen</label>
+                <span>2026-03-09 16:54:31</span>
+            </div>
+            <div class="metric">
+                <label>Current Mission</label>
+                <span>Meticulous system chronicle.</span>
             </div>
         </div>
     </div>
@@ -251,34 +267,34 @@
     <div class="diary">
         <h2>Latest Diary Entries</h2>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:51:01]</span>
+            <span class="timestamp">[2026-03-09 16:54:31]</span>
             <span class="agent-name">[SystemCheckup]</span>
             <span class="event-type">[AGENT_HEALTH]</span>
-            <span class="success-text">[SUCCESS]: All key agents (Diary, GitAgent, SlackBridge) show recent log activity. No failures reported in GitAgent.</span>
+            <span class="success-text">[SUCCESS]: All key agents (Diary, GitAgent, SlackBridge, Rover) show recent activity. No failures reported.</span>
         </div>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:51:00]</span>
+            <span class="timestamp">[2026-03-09 16:54:30]</span>
             <span class="agent-name">[SystemCheckup]</span>
             <span class="event-type">[NETWORK_STATUS]</span>
             <span class="success-text">[SUCCESS]: GitHub origin is reachable (git ls-remote confirmed).</span>
         </div>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:50:27]</span>
-            <span class="agent-name">[GitAgent]</span>
-            <span class="event-type">[REPO_SYNC]</span>
-            <span class="success-text">[SUCCESS]: Atomic commit ba9aadc6 performed. 1 commit added (Total 4 pending). Push threshold (5 commits / 30 mins) not met.</span>
+            <span class="timestamp">[2026-03-09 16:53:40]</span>
+            <span class="agent-name">[SlackBridge]</span>
+            <span class="event-type">[AGENT_ACTION]</span>
+            <span class="warning-text">[PENDING]: Rover Agent starting task: slack_1773071620093.md</span>
         </div>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:49:52]</span>
+            <span class="timestamp">[2026-03-09 16:53:40]</span>
             <span class="agent-name">[SlackBridge]</span>
-            <span class="event-type">[AGENT_START]</span>
-            <span class="success-text">[SUCCESS]: SlackBridge listener starting...</span>
+            <span class="event-type">[USER_REQUEST]</span>
+            <span class="success-text">[SUCCESS]: Created task slack_1773071620093.md from U0AK3J7LS9J: "tell when it's complete"</span>
         </div>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:49:36]</span>
+            <span class="timestamp">[2026-03-09 16:53:01]</span>
             <span class="agent-name">[SlackBridge]</span>
-            <span class="event-type">[AGENT_HEARTBEAT]</span>
-            <span class="success-text">[SUCCESS]: Steady state monitoring active. Slack listener (PID 66399) is healthy and listening.</span>
+            <span class="event-type">[AGENT_ACTION]</span>
+            <span class="success-text">[SUCCESS]: Rover Agent successfully completed task: slack_1773071530595.md</span>
         </div>
     </div>
 </body>

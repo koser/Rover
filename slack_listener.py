@@ -114,7 +114,7 @@ def handle_app_mentions(body, say, logger):
         
         if result.returncode == 0:
             log_event("AGENT_ACTION", f"Rover Agent successfully completed task: {task_filename}", "SUCCESS")
-            # say(f"✅ Rover Agent completed the task: {task_filename}") # Optionally send back a summary
+            say(f"✅ Rover Agent completed the task: {task_filename}")
         else:
             log_event("SYSTEM_ERROR", f"Rover Agent failed task {task_filename}: {result.stderr}", "ERROR")
             say(f"⚠️ Rover Agent encountered an error executing task {task_filename}.")
