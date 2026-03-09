@@ -42,6 +42,10 @@ if not SLACK_BOT_TOKEN or not SLACK_APP_TOKEN:
 
 app = App(token=SLACK_BOT_TOKEN)
 
+# Global state for tracking active tasks
+active_tasks = 0
+active_tasks_lock = threading.Lock()
+
 def log_event(event_type, description, status):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     log_entry = f"[{timestamp}] [SlackBridge] [{event_type}] [{status}]: {description}\n"
@@ -53,6 +57,20 @@ def log_event(event_type, description, status):
             f.write(log_entry)
 
 def run_gemini_task(task_filename, clean_text, user_id, say):
+    global active_tasks
+    stop_timer = threading.Event()
+
+    def progress_timer():
+        start_time = time.time()
+        # Initial wait before the first "still working" message
+        if stop_timer.wait(60):
+            return
+        while not stop_timer.is_set():
+            elapsed = int(time.time() - start_time)
+            say(f"I'm still working on your request, <@{user_id}>. It's been about {elapsed} seconds, and I'm continuing to process it. I'll let you know as soon as I'm finished! ⏳")
+            if stop_timer.wait(60): # Update every minute
+                break
+
     try:
         # Combined context for the Rover Agent
         with open(ROVER_CONFIG_PATH, 'r') as f:
@@ -61,19 +79,45 @@ def run_gemini_task(task_filename, clean_text, user_id, say):
         with open(gemini_md_path, 'r') as f:
             gemini_md = f.read()
         
+        # Enhanced instruction to ensure natural language response
+        instruction = (
+            f"User Instruction: {clean_text}. \n\n"
+            f"IMPORTANT: You are responding to <@{user_id}> on Slack. "
+            "Provide a helpful, friendly, and natural language response. "
+            "If you performed actions, summarize them clearly. "
+            "If you found information, present it in an easy-to-read format."
+        )
+
         gemini_cmd = [
             GEMINI_PATH,
             "--yolo",
-            f"System Context: {gemini_md}. Your Config: {rover_config}. Instruction: {clean_text}"
+            f"System Context: {gemini_md}. Your Config: {rover_config}. Instruction: {instruction}"
         ]
 
         log_event("AGENT_ACTION", f"Rover Agent starting task: {task_filename}", "PENDING")
         
-        result = subprocess.run(gemini_cmd, capture_output=True, text=True, check=False)
+        # Start the progress timer thread
+        timer_thread = threading.Thread(target=progress_timer)
+        timer_thread.start()
+
+        try:
+            result = subprocess.run(gemini_cmd, capture_output=True, text=True, check=False)
+        finally:
+            stop_timer.set()
+            timer_thread.join()
         
         if result.returncode == 0:
             log_event("AGENT_ACTION", f"Rover Agent successfully completed task: {task_filename}", "SUCCESS")
-            say(f"✅ Rover Agent completed the task: {task_filename}")
+            
+            # Format response: prioritize stdout, but keep it within Slack's limits
+            response = result.stdout.strip()
+            if not response:
+                response = "I've finished the task, but I don't have a specific message to report. Please let me know if there's anything else you need!"
+            
+            if len(response) > 3000:
+                response = response[:3000] + "\n\n...(Response truncated due to length)..."
+            
+            say(f"✅ <@{user_id}>, I've completed your request!\n\n{response}")
             
             # Update task file status
             task_path = os.path.join(TASK_DIR, task_filename)
@@ -85,21 +129,28 @@ def run_gemini_task(task_filename, clean_text, user_id, say):
                     f.write(updated_content)
         else:
             log_event("SYSTEM_ERROR", f"Rover Agent failed task {task_filename}: {result.stderr}", "ERROR")
-            say(f"⚠️ Rover Agent encountered an error executing task {task_filename}.")
+            error_details = result.stderr.strip() or result.stdout.strip() or "No error details available."
+            if len(error_details) > 1000:
+                error_details = error_details[:1000] + "..."
+            say(f"I'm sorry <@{user_id}>, but I ran into a bit of trouble while working on that:\n\n```{error_details}```\n\nIf you'd like, I can try again or you can try rephrasing the request.")
             
     except Exception as e:
         log_event("SYSTEM_ERROR", f"Error in background task {task_filename}: {str(e)}", "ERROR")
-        say(f"⚠️ Error executing background task {task_filename}: {str(e)}")
+        say(f"⚠️ I'm very sorry <@{user_id}>, but a system error occurred: {str(e)}")
+    finally:
+        with active_tasks_lock:
+            active_tasks -= 1
 
 @app.event("app_mention")
 def handle_app_mentions(body, say, logger):
+    global active_tasks
     event = body["event"]
     text = event.get("text", "").strip()
     user_id = event["user"]
     clean_text = re.sub(r'<@.*?>', '', text).strip()
     
     if clean_text.lower() == 'ping!':
-        say(f"pong! 🏓 The current system time is {datetime.now().strftime('%H:%M:%S')}.")
+        say(f"pong! 🏓 I'm alive and well. The current system time is {datetime.now().strftime('%H:%M:%S')}.")
         log_event("USER_REQUEST", f"Received ping! from {user_id}", "SUCCESS")
         return
 
@@ -113,7 +164,13 @@ def handle_app_mentions(body, say, logger):
         with open(task_path, "w") as f:
             f.write(task_content)
         
-        say(f"🚀 Instruction received, <@{user_id}>. Handing off to the **Rover Agent**... (Task: {task_filename})")
+        with active_tasks_lock:
+            if active_tasks > 0:
+                say(f"Hi <@{user_id}>! I've received your request: \"{clean_text}\". I'm currently handling {active_tasks} other task(s), so I've added yours to my queue and will start on it as soon as I'm free. ⏳")
+            else:
+                say(f"Hi <@{user_id}>! I'm on it. I'll start working on your request right away: \"{clean_text}\". I'll update you as soon as I'm finished! 🚀")
+            active_tasks += 1
+
         log_event("USER_REQUEST", f"Created task {task_filename} from {user_id}: \"{clean_text}\"", "SUCCESS")
 
         # Start Gemini task in a background thread
