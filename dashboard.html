@@ -23,77 +23,156 @@
         .tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; margin-right: 5px; color: #fff; }
         .tag.success { background-color: #27ae60; }
         .tag.error { background-color: #c0392b; }
+
+        /* Tabs Styling */
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { padding: 10px 20px; cursor: pointer; background: #eee; border: 1px solid #ddd; border-bottom: none; border-radius: 8px 8px 0 0; margin-right: 5px; transition: 0.3s; }
+        .tab:hover { background: #ddd; }
+        .tab.active { background: #fff; border-bottom: 2px solid #fff; margin-bottom: -2px; font-weight: bold; color: #2980b9; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        code { background: #f8f9fa; padding: 2px 4px; border-radius: 4px; border: 1px solid #ddd; font-family: monospace; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 8px; border: 1px solid #ddd; overflow-x: auto; }
+        ol li { margin-bottom: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>AgentService Dashboard</h1>
+
+        <div class="tabs">
+            <div class="tab active" onclick="openTab(event, 'dashboard')">Dashboard</div>
+            <div class="tab" onclick="openTab(event, 'instructions')">Instructions</div>
+        </div>
         
-        <div class="section">
-            <h2>System Health</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Connection Status</h3>
-                    <p class="status success">GitHub Reachable</p>
-                    <p class="meta">Last checked: 2026-03-09 16:30:47</p>
+        <div id="dashboard" class="tab-content active">
+            <div class="section">
+                <h2>System Health</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Connection Status</h3>
+                        <p class="status success">GitHub Reachable</p>
+                        <p class="meta">Last checked: 2026-03-09 16:34:12</p>
+                    </div>
+                    <div class="card">
+                        <h3>Git Backup</h3>
+                        <p class="status success">Synced (4 pending)</p>
+                        <p class="meta">Last Local Commit: Mon Mar 9 16:33:07 2026</p>
+                        <p class="meta">Last GitHub Push: Mon Mar 9 16:24:11 2026</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>Git Backup</h3>
-                    <p class="status success">Synced (2 pending)</p>
-                    <p class="meta">Last Local Commit: Mon Mar 9 16:29:40 2026</p>
-                    <p class="meta">Last GitHub Push: Mon Mar 9 16:24:11 2026</p>
+            </div>
+
+            <div class="section">
+                <h2>Active Agents</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Diary Agent</h3>
+                        <p class="status success">Active</p>
+                        <p class="meta">Last Seen: 2026-03-09 16:33:21</p>
+                        <p class="meta">Mission: Maintain immutable audit trail of all system events.</p>
+                    </div>
+                    <div class="card">
+                        <h3>GitAgent</h3>
+                        <p class="status success">Active</p>
+                        <p class="meta">Last Seen: 2026-03-09 16:33:31</p>
+                        <p class="meta">Mission: Manage local commits and ensure secure pushes to GitHub.</p>
+                    </div>
+                    <div class="card">
+                        <h3>SlackBridge</h3>
+                        <p class="status success">Active</p>
+                        <p class="meta">Last Seen: 2026-03-09 16:32:31</p>
+                        <p class="meta">Mission: Translate Slack @Rover mentions into actionable task files.</p>
+                    </div>
+                    <div class="card">
+                        <h3>System Inspector</h3>
+                        <p class="status success">Active</p>
+                        <p class="meta">Last Seen: 2026-03-09 16:34:12</p>
+                        <p class="meta">Mission: Monitor health and connectivity of the AgentService ecosystem.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Latest Diary Entries</h2>
+                <div class="diary-entry">
+                    <span class="timestamp">[2026-03-09 16:34:12]</span> <span class="tag success">NETWORK_STATUS</span> GitHub connectivity verified via git ls-remote origin. GitAgent log shows no push failures.
+                </div>
+                <div class="diary-entry">
+                    <span class="timestamp">[2026-03-09 16:33:31]</span> <span class="tag success">REPOSITORY_SYNC</span> Committed 1 change(s). 4 pending. No push performed (threshold not met).
+                </div>
+                <div class="diary-entry">
+                    <span class="timestamp">[2026-03-09 16:33:21]</span> <span class="tag success">AGENT_STATUS</span> All tasks in 01_observe_changes.md completed for this cycle. State changes recorded.
+                </div>
+                <div class="diary-entry">
+                    <span class="timestamp">[2026-03-09 16:33:20]</span> <span class="tag success">FILE_EVENT</span> Modified: dashboard.html (16:31), tasks/03_connectivity_audit.md (16:31).
+                </div>
+                <div class="diary-entry">
+                    <span class="timestamp">[2026-03-09 16:33:19]</span> <span class="tag success">AGENT_HEARTBEAT</span> Agent Diary wake-up cycle initiated.
                 </div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>Active Agents</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Diary Agent</h3>
-                    <p class="status success">Active</p>
-                    <p class="meta">Last Seen: 2026-03-09 16:30:43</p>
-                    <p class="meta">Mission: Maintain immutable audit trail of all system events.</p>
-                </div>
-                <div class="card">
-                    <h3>GitAgent</h3>
-                    <p class="status success">Active</p>
-                    <p class="meta">Last Seen: 2026-03-09 16:29:15</p>
-                    <p class="meta">Mission: Manage local commits and ensure secure pushes to GitHub.</p>
-                </div>
-                <div class="card">
-                    <h3>SlackBridge</h3>
-                    <p class="status success">Active</p>
-                    <p class="meta">Last Seen: 2026-03-09 16:29:14</p>
-                    <p class="meta">Mission: Translate Slack @Rover mentions into actionable task files.</p>
-                </div>
-                <div class="card">
-                    <h3>System Inspector</h3>
-                    <p class="status success">Active</p>
-                    <p class="meta">Last Seen: 2026-03-09 16:30:47</p>
-                    <p class="meta">Mission: Monitor health and connectivity of the AgentService ecosystem.</p>
-                </div>
-            </div>
-        </div>
+        <div id="instructions" class="tab-content">
+            <div class="section">
+                <h2>Slack Connection Instructions</h2>
+                <p>Follow these steps to connect your Rover agent to your Slack account on your phone and start giving instructions.</p>
+                
+                <h3>1. Initial Configuration</h3>
+                <ol>
+                    <li><strong>Install Slack:</strong> Ensure the Slack app is installed on your phone and you are logged in.</li>
+                    <li><strong>Verify Tokens:</strong> Open <code>config.env</code> in the project root. Ensure the following are set correctly:
+                        <ul>
+                            <li><code>SLACK_BOT_TOKEN</code>: Starts with <code>xoxb-</code></li>
+                            <li><code>SLACK_APP_TOKEN</code>: Starts with <code>xapp-</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Restart Rover:</strong> Run <code>./StartRover.sh</code> in your terminal to apply any configuration changes.</li>
+                </ol>
 
-        <div class="section">
-            <h2>Latest Diary Entries</h2>
-            <div class="diary-entry">
-                <span class="timestamp">[2026-03-09 16:30:47]</span> <span class="tag success">NETWORK_STATUS</span> GitHub connectivity verified via git ls-remote origin. GitAgent log shows no push failures (2 total pending).
-            </div>
-            <div class="diary-entry">
-                <span class="timestamp">[2026-03-09 16:30:43]</span> <span class="tag success">AGENT_STATUS</span> All tasks in 01_observe_changes.md completed for this cycle. State changes recorded.
-            </div>
-            <div class="diary-entry">
-                <span class="timestamp">[2026-03-09 16:30:43]</span> <span class="tag success">FILE_EVENT</span> Modified: dashboard.html (16:28), slack_listener.py (16:29), tasks/05_listen_for_mentions.md (16:29).
-            </div>
-            <div class="diary-entry">
-                <span class="timestamp">[2026-03-09 16:29:15]</span> <span class="tag success">SYNC_REPO</span> Added 1 local commit (2 total pending). No push performed.
-            </div>
-            <div class="diary-entry">
-                <span class="timestamp">[2026-03-09 16:29:14]</span> <span class="tag success">AGENT_START</span> SlackBridge listener starting...
+                <h3>2. How to try it</h3>
+                <ol>
+                    <li><strong>Join the Channel:</strong> Go to the Slack channel where you added the @Rover bot (e.g., #general or a private channel). If the bot isn't there, type <code>/invite @Rover</code>.</li>
+                    <li><strong>Send a Ping:</strong> Type <code>@Rover ping!</code> in the channel.</li>
+                    <li><strong>Give a Command:</strong> You can also send instructions like <code>@Rover check the disk space</code> or <code>@Rover sync the repository</code>.</li>
+                </ol>
+
+                <h3>3. What to expect</h3>
+                <ul>
+                    <li><strong>Immediate Response:</strong> For a "ping!", the Rover will reply with <code>pong! 🏓</code> and the current system time.</li>
+                    <li><strong>Task Creation:</strong> For any other instruction, the Rover will reply with <code>🚀 Instruction received... Task created: slack_xxx.md</code>.</li>
+                    <li><strong>Action:</strong> The agent system will pick up the new task from the <code>tasks/</code> folder and begin execution in the next cycle.</li>
+                </ul>
+
+                <h3>4. Troubleshooting</h3>
+                <div class="card">
+                    <p><strong>If @Rover doesn't respond:</strong></p>
+                    <ol>
+                        <li>Check if the <code>SlackBridge</code> agent is marked as "Active" in the Dashboard tab.</li>
+                        <li>Verify that <strong>Socket Mode</strong> is enabled in your Slack App settings (api.slack.com).</li>
+                        <li>Ensure <strong>App Mentions</strong> are enabled in "Event Subscriptions".</li>
+                        <li>Check the logs: <code>tail -f logs/diary.log | grep SlackBridge</code></li>
+                    </ol>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 </body>
 </html>
