@@ -23,21 +23,18 @@ cleanup() {
 # Trap exit signals (including closing the terminal)
 trap cleanup SIGINT SIGTERM SIGHUP EXIT
 
-# 1. Launch agents in the background of THIS shell
-./run_agent.sh Diary tasks/01_observe_changes.md &
-AGENT_PIDS+=($!)
-
-./run_agent.sh GitAgent tasks/02_sync_repo.md &
-AGENT_PIDS+=($!)
-
-./run_agent.sh SystemCheckup tasks/03_connectivity_audit.md &
-AGENT_PIDS+=($!)
-
+# 1. Launch SlackBridge (Real-time listener)
+# This MUST stay running to hear your Slack commands.
 ./run_agent.sh SlackBridge tasks/05_listen_for_mentions.md &
 AGENT_PIDS+=($!)
 
-echo "All agents are running. Keeping this window open will keep them alive."
-echo "Closing this window or pressing Ctrl+C will shut down all agents."
+# 2. Launch Rover (The Manager / Scheduler)
+# Rover wakes up every 10 mins to check if the 24h cycle for others is due.
+./run_agent.sh Rover tasks/00_scheduler.md &
+AGENT_PIDS+=($!)
+
+echo "System active. SlackBridge is listening."
+echo "Rover is managing the 24-hour cycle for Diary, GitAgent, and SystemCheckup."
 echo "---"
 
 # Wait for all background agents (this keeps the script in the foreground)

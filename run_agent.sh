@@ -15,6 +15,11 @@ PID_FILE="$AGENT_DIR/${AGENT_NAME}.pid"
 HEARTBEAT_LOG="$LOG_DIR/heartbeat.log"
 
 # --- Execution Loop ---
+RUN_ONCE=false
+if [ "$3" == "--once" ]; then
+    RUN_ONCE=true
+fi
+
 while true; do
     WAKE_MSG="--- [$AGENT_NAME] Waking Up: $(date +%H:%M:%S) ---"
     echo "$WAKE_MSG" >> "$HEARTBEAT_LOG"
@@ -45,5 +50,10 @@ while true; do
 
     $AI_ENGINE --yolo "$CORE_CONTEXT $SKILLS_CONTEXT" >> "$AGENT_LOG" 2>&1
     
+    if $RUN_ONCE; then
+        echo "[$AGENT_NAME] Single execution complete. Exiting."
+        break
+    fi
+
     sleep 600
 done
