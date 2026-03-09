@@ -1,6 +1,7 @@
 import os
 import time
 import re
+import subprocess
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from datetime import datetime
@@ -12,6 +13,8 @@ TASK_DIR = os.path.join(BASE_DIR, "tasks")
 DIARY_PATH = os.path.join(LOG_DIR, "diary.log")
 ALERTS_PATH = os.path.join(LOG_DIR, "ALERTS.log")
 CONFIG_PATH = os.path.join(BASE_DIR, "config.env")
+ROVER_CONFIG_PATH = os.path.join(BASE_DIR, "agents/Rover.config")
+GEMINI_PATH = "/opt/homebrew/bin/gemini"
 
 def load_config(path):
     config = {}
@@ -80,11 +83,41 @@ def handle_app_mentions(body, say, logger):
         with open(task_path, "w") as f:
             f.write(task_content)
         
-        say(f"🚀 Instruction received, <@{user_id}>. Task created: {task_filename}")
+        say(f"🚀 Instruction received, <@{user_id}>. Handing off to the **Rover Agent**... (Task: {task_filename})")
         log_event("USER_REQUEST", f"Created task {task_filename} from {user_id}: \"{clean_text}\"", "SUCCESS")
+
+        # EXECUTE: Hand off the task directly to the 'gemini' binary as the Rover Agent
+        # We read the Rover.config to provide the persona context
+        with open(ROVER_CONFIG_PATH, 'r') as f:
+            rover_config = f.read()
+        
+        # Combine persona, project context, and the specific instruction
+        # Note: We're running it in yolo mode for autonomous execution
+        gemini_cmd = [
+            GEMINI_PATH,
+            "--yolo",
+            f"You are the Rover Agent. Config: {rover_config}. Instruction: {clean_text}"
+        ]
+
+        # Log the start of execution
+        log_event("AGENT_ACTION", f"Rover Agent starting task: {task_filename}", "PENDING")
+        
+        # Run the command and capture output
+        # We'll run it in the background or wait for it?
+        # User said "read that message... as if it was an instruction sent here in chat"
+        # This implies it should happen "now".
+        result = subprocess.run(gemini_cmd, capture_output=True, text=True, check=False)
+        
+        if result.returncode == 0:
+            log_event("AGENT_ACTION", f"Rover Agent successfully completed task: {task_filename}", "SUCCESS")
+            # say(f"✅ Rover Agent completed the task: {task_filename}") # Optionally send back a summary
+        else:
+            log_event("SYSTEM_ERROR", f"Rover Agent failed task {task_filename}: {result.stderr}", "ERROR")
+            say(f"⚠️ Rover Agent encountered an error executing task {task_filename}.")
+
     except Exception as e:
-        log_event("SYSTEM_ERROR", f"Failed to create task file for {user_id}: {str(e)}", "ERROR")
-        say(f"⚠️ Error creating task: {str(e)}")
+        log_event("SYSTEM_ERROR", f"Failed to process instruction for {user_id}: {str(e)}", "ERROR")
+        say(f"⚠️ Error processing instruction: {str(e)}")
 
 if __name__ == "__main__":
     try:
