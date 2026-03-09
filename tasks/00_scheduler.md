@@ -8,16 +8,19 @@ Check `logs/agent_schedule.json` for the last run timestamps.
 
 ## Constraints
 - **Diary Agent**: Run once every 24 hours.
-- **GitAgent**: Run once every 24 hours.
+- **GitAgent (Local Versioning)**: Run frequently (every 1-2 hours) for local commits.
+- **GitAgent (GitHub Backup)**: Run exactly once every 24 hours.
 - **SystemCheckup Agent**: Run once every 24 hours.
-- **SlackBridge**: Stays real-time (handled by StartRover.sh).
 
 ## Steps
-1. [ ] **Analyze**: Read `logs/agent_schedule.json`. If it doesn't exist, assume all agents need to run.
-2. [ ] **Calculate**: For each support agent, check if more than 24 hours (86,400 seconds) have passed since the `last_run`.
-3. [ ] **Execute**: If 24 hours have passed, use the `run_agent.sh` tool with the `--once` flag to trigger the agent's task.
-4. [ ] **Update**: After successful execution, update the `last_run` timestamp for that agent in `logs/agent_schedule.json`.
-5. [ ] **Log**: Record the scheduling check and any triggered executions in the system diary.
+1. [ ] **Analyze**: Read `logs/agent_schedule.json`.
+2. [ ] **Calculate (Diary/Checkup)**: If 24h passed, trigger `run_agent.sh` for Diary and SystemCheckup with the `--once` flag.
+3. [ ] **Calculate (GitAgent)**:
+    - **Local**: Trigger `GitAgent` every 1-2 hours for `atomic_commit` operations.
+    - **Backup**: Trigger `GitAgent` to check the 24h `GitAgent_push` threshold.
+4. [ ] **Execute**: Run the agents as required.
+5. [ ] **Update Schedule**: Record new `last_run` or `GitAgent_push` timestamps.
+6. [ ] **Log**: Update the system diary.
 
 ## Desired Output
-A strictly controlled 24-hour cycle for high-API-usage agents, managed autonomously by Rover.
+A strictly controlled repository and system state that balances local frequency with remote efficiency.

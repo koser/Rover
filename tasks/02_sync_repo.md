@@ -1,18 +1,23 @@
-# Task: Smart Repository Sync
+# Task: 24h Repository Backup
 
 ## Goal
-Manage the local and remote repository using the 'Atomic-Batch' strategy.
+Perform local versioning (commits) and handle the 24-hour remote backup (GitHub push).
 
 ## Constraints
-- **Commit Frequency**: Every cycle if changes are present.
-- **Push Frequency**: Every 15 cycles (30 minutes) or if more than 5 commits are pending.
+- **Local Commits**: Can be performed frequently (e.g., when the scheduler triggers).
+- **GitHub Push (Remote)**: Strictly once every 24 hours.
+
+## Current Sync Status
+Check `logs/agent_schedule.json` for the last `GitAgent_push` timestamp.
 
 ## Steps
-1. [x] **Analyze**: Check `git status --porcelain`.
-2. [x] **Local Commit**: If files changed, perform an `atomic_commit` with a detailed message.
-3. [x] **Smart Push**: Count the commits since the last push (`git log origin/main..main --oneline | wc -l`).
-4. [x] **Push**: If the count is >= 5, or if 15 cycles have passed (check your own log), execute a push to `origin/main`.
-5. [x] **Log**: Update the diary with the number of commits added and whether a push was performed.
+1. [ ] **Analyze**: Run `git status --porcelain` to check for local changes.
+2. [ ] **Commit**: If changes are found, perform an `atomic_commit` with a detailed message.
+3. [ ] **Calculate Push**: Read `logs/agent_schedule.json`. If it doesn't exist, assume a push is needed.
+4. [ ] **Threshold**: Check if more than 24 hours (86,400 seconds) have passed since the last `GitAgent_push`.
+5. [ ] **Execute Push**: If the 24h threshold is met, perform a `git push origin main`.
+6. [ ] **Update Schedule**: After a successful push, update the `GitAgent_push` timestamp in `logs/agent_schedule.json`.
+7. [ ] **Log**: Update the system diary with the number of local commits added and whether a remote backup was performed.
 
 ## Desired Output
-A repository that is always locally up-to-date and remotely backed up without excessive noise.
+A repository that maintains its local history frequently but only interacts with GitHub once per day.

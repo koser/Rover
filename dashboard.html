@@ -6,296 +6,238 @@
     <title>AgentService Dashboard</title>
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --card-bg: #fff;
-            --header-color: #2c3e50;
-            --border-color: #eee;
-            --log-border: #f0f0f0;
-            --metric-label: #7f8c8d;
-            --timestamp: #95a5a6;
-            --primary-blue: #3498db;
-            --shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        body.dark-mode {
             --bg-color: #121212;
-            --text-color: #e0e0e0;
             --card-bg: #1e1e1e;
-            --header-color: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-green: #4caf50;
+            --accent-blue: #2196f3;
+            --accent-orange: #ff9800;
             --border-color: #333;
-            --log-border: #2c2c2c;
-            --metric-label: #b0b0b0;
-            --timestamp: #888;
-            --shadow: 0 4px 6px rgba(0,0,0,0.3);
+            --tab-inactive: #2c2c2c;
         }
-
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            line-height: 1.6; 
-            color: var(--text-color); 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 20px; 
-            background-color: var(--bg-color); 
-            transition: background-color 0.3s, color 0.3s;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
         }
-
-        h1 { color: var(--header-color); border-bottom: 2px solid var(--primary-blue); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Toggle Switch Styles */
-        .theme-switch-wrapper {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
-            font-weight: normal;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
-        .theme-switch {
-            display: inline-block;
-            height: 24px;
-            position: relative;
-            width: 50px;
-            margin-left: 10px;
+        h1 { margin: 0; font-size: 1.5rem; }
+        .status-badge {
+            background-color: var(--accent-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
-        .theme-switch input { display: none; }
-        .slider {
-            background-color: #ccc;
-            bottom: 0;
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: var(--tab-inactive);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
             cursor: pointer;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            transition: .4s;
-            border-radius: 34px;
+            font-weight: bold;
+            color: var(--text-secondary);
         }
-        .slider:before {
-            background-color: #fff;
-            bottom: 4px;
-            content: "";
-            height: 16px;
-            left: 4px;
-            position: absolute;
-            transition: .4s;
-            width: 16px;
-            border-radius: 50%;
+        .tab.active {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--accent-blue);
         }
-        input:checked + .slider { background-color: var(--primary-blue); }
-        input:checked + .slider:before { transform: translateX(26px); }
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+        }
+        .tab-content.active { display: block; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .card { background: var(--card-bg); border-radius: 8px; box-shadow: var(--shadow); padding: 20px; border-top: 5px solid var(--primary-blue); transition: background-color 0.3s, box-shadow 0.3s; }
-        .card.success { border-top-color: #27ae60; }
-        .card.warning { border-top-color: #f39c12; }
-        .card.error { border-top-color: #e74c3c; }
-        .card h2 { margin-top: 0; color: var(--header-color); font-size: 1.2rem; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: #252525;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .card-title { font-weight: bold; }
+        .active-dot { color: var(--accent-green); margin-right: 5px; }
         
-        .status { font-weight: bold; display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; text-transform: uppercase; }
-        .status.active { background: #e8f5e9; color: #2e7d32; }
-        body.dark-mode .status.active { background: #1b3320; color: #81c784; }
-        
-        .status.idle, .status.warning { background: #fff3e0; color: #ef6c00; }
-        body.dark-mode .status.idle, body.dark-mode .status.warning { background: #33271b; color: #ffb74d; }
+        /* Live Events List */
+        .event-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .event-item {
+            display: flex;
+            gap: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .event-item:last-child { border-bottom: none; }
+        .event-ts { color: var(--accent-blue); flex-shrink: 0; }
+        .event-agent { color: var(--accent-orange); width: 100px; flex-shrink: 0; }
+        .event-type { color: var(--accent-green); width: 120px; flex-shrink: 0; }
+        .event-msg { color: #eee; overflow: hidden; text-overflow: ellipsis; }
 
-        .metric { margin-bottom: 10px; }
-        .metric label { font-weight: bold; color: var(--metric-label); font-size: 0.9rem; display: block; }
-        .metric span { font-size: 1rem; color: var(--header-color); }
-        
-        .diary { background: var(--card-bg); border-radius: 8px; padding: 20px; box-shadow: var(--shadow); transition: background-color 0.3s, box-shadow 0.3s; }
-        .diary h2 { margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; color: var(--header-color); }
-        .log-entry { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid var(--log-border); }
-        .log-entry:last-child { border-bottom: none; }
-        .timestamp { color: var(--timestamp); margin-right: 10px; }
-        .agent-name { font-weight: bold; color: var(--primary-blue); margin-right: 10px; }
-        .event-type { color: #8e44ad; font-weight: bold; margin-right: 10px; }
-        body.dark-mode .event-type { color: #bb86fc; }
-        .success-text { color: #27ae60; }
-        body.dark-mode .success-text { color: #81c784; }
-        .warning-text { color: #f39c12; }
+        /* Instructions */
+        .instructions-section h3 { color: var(--accent-blue); margin-top: 20px; }
+        .instructions-section code { background: #000; padding: 2px 5px; border-radius: 4px; color: #ffeb3b; }
     </style>
 </head>
 <body>
-    <h1>
-        AgentService Status Dashboard
-        <div class="theme-switch-wrapper">
-            <span>Dark Mode</span>
-            <label class="theme-switch" for="checkbox">
-                <input type="checkbox" id="checkbox" />
-                <div class="slider"></div>
-            </label>
+    <div class="container">
+        <header>
+            <h1>AgentService Dashboard</h1>
+            <div class="status-badge">SYSTEM ACTIVE</div>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" onclick="openTab(event, 'overview')">Overview</div>
+            <div class="tab" onclick="openTab(event, 'events')">Live Events</div>
+            <div class="tab" onclick="openTab(event, 'instructions')">Instructions</div>
         </div>
-    </h1>
+
+        <!-- OVERVIEW TAB -->
+        <div id="overview" class="tab-content active">
+            <h2>Active Agents</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Rover (Manager)</span><span class="active-dot">● Active</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Mission: 24h cycle orchestration & scheduling.</p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">SlackBridge</span><span class="active-dot">● Active</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Mission: Real-time listener for @Rover mentions.</p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Diary Agent</span><span style="color: #666;">○ Idle</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Next run scheduled by Rover (24h cycle).</p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">GitAgent</span><span style="color: #666;">○ Idle</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Next run scheduled by Rover (24h cycle).</p>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 30px;">Repository Status</h2>
+            <div class="card">
+                <p><strong>GitHub Connection:</strong> <span style="color: var(--accent-green);">HEALTHY</span></p>
+                <p><strong>Sync Status:</strong> <span style="color: var(--accent-blue);">MANAGED BY ROVER</span></p>
+            </div>
+        </div>
+
+        <!-- LIVE EVENTS TAB -->
+        <div id="events" class="tab-content">
+            <h2>System Action Log</h2>
+            <div class="event-list">
+                <!-- Example entries - these would be updated by the Diary agent -->
+                <div class="event-item">
+                    <span class="event-ts">19:27:10</span>
+                    <span class="event-agent">[SystemCheckup]</span>
+                    <span class="event-type">[NETWORK]</span>
+                    <span class="event-msg">GitHub connectivity verified via ls-remote.</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">19:26:47</span>
+                    <span class="event-agent">[SlackBridge]</span>
+                    <span class="event-type">[USER_REQ]</span>
+                    <span class="event-msg">Received instruction: "make a tab in the dashboard..."</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">19:26:45</span>
+                    <span class="event-agent">[GitAgent]</span>
+                    <span class="event-type">[REPO_SYNC]</span>
+                    <span class="event-msg">Added local commit, pushed 5 commits to origin.</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">19:25:25</span>
+                    <span class="event-agent">[Rover]</span>
+                    <span class="event-type">[SCHEDULER]</span>
+                    <span class="event-msg">Checking 24h cycle status for support agents.</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">19:25:00</span>
+                    <span class="event-agent">[Diary]</span>
+                    <span class="event-type">[HEARTBEAT]</span>
+                    <span class="event-msg">System Chronicler awake and monitoring changes.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSTRUCTIONS TAB -->
+        <div id="instructions" class="tab-content">
+            <div class="instructions-section">
+                <h2>Slack Connection Guide</h2>
+                <h3>1. Configuration</h3>
+                <p>Ensure <code>config.env</code> contains your <code>SLACK_BOT_TOKEN</code> (xoxb-) and <code>SLACK_APP_TOKEN</code> (xapp-).</p>
+                
+                <h3>2. Usage</h3>
+                <p>Mention <code>@Rover</code> in any channel the bot is invited to.
+                <ul>
+                    <li><code>@Rover ping!</code> - Quick connectivity test.</li>
+                    <li><code>@Rover [instruction]</code> - Sends a command to the Rover agent.</li>
+                </ul>
+                </p>
+
+                <h3>3. 24-Hour Cycle</h3>
+                <p>Note: Agents like Git and Diary only run once every 24 hours. Rover manages this automatically. Slack remains real-time.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
-        const currentTheme = localStorage.getItem('theme');
-
-        if (currentTheme) {
-            document.body.classList.add(currentTheme === 'dark' ? 'dark-mode' : '');
-            if (currentTheme === 'dark') {
-                toggleSwitch.checked = true;
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
             }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
         }
-
-        function switchTheme(e) {
-            if (e.target.checked) {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }    
-        }
-
-        toggleSwitch.addEventListener('change', switchTheme, false);
     </script>
-
-    <div class="grid">
-        <!-- Agent Cards -->
-        <div class="card success">
-            <h2>SystemCheckup</h2>
-            <div class="metric">
-                <label>Status</label>
-                <span class="status active">Active</span>
-            </div>
-            <div class="metric">
-                <label>Last Seen</label>
-                <span>2026-03-09 17:02:10</span>
-            </div>
-            <div class="metric">
-                <label>Current Mission</label>
-                <span>Monitor health and connectivity.</span>
-            </div>
-        </div>
-
-        <div class="card success">
-            <h2>Rover</h2>
-            <div class="metric">
-                <label>Status</label>
-                <span class="status active">Active</span>
-            </div>
-            <div class="metric">
-                <label>Last Seen</label>
-                <span>2026-03-09 17:00:20</span>
-            </div>
-            <div class="metric">
-                <label>Current Mission</label>
-                <span>Fulfill operator instructions.</span>
-            </div>
-        </div>
-
-        <div class="card success">
-            <h2>GitAgent</h2>
-            <div class="metric">
-                <label>Status</label>
-                <span class="status active">Active</span>
-            </div>
-            <div class="metric">
-                <label>Last Seen</label>
-                <span>2026-03-09 17:01:23</span>
-            </div>
-            <div class="metric">
-                <label>Current Mission</label>
-                <span>Maintain GitHub backup.</span>
-            </div>
-        </div>
-
-        <div class="card success">
-            <h2>SlackBridge</h2>
-            <div class="metric">
-                <label>Status</label>
-                <span class="status active">Active</span>
-            </div>
-            <div class="metric">
-                <label>Last Seen</label>
-                <span>2026-03-09 17:00:20</span>
-            </div>
-            <div class="metric">
-                <label>Current Mission</label>
-                <span>Bridge Slack to Backend.</span>
-            </div>
-        </div>
-
-        <div class="card success">
-            <h2>Diary</h2>
-            <div class="metric">
-                <label>Status</label>
-                <span class="status active">Active</span>
-            </div>
-            <div class="metric">
-                <label>Last Seen</label>
-                <span>2026-03-09 17:01:45</span>
-            </div>
-            <div class="metric">
-                <label>Current Mission</label>
-                <span>Meticulous system chronicle.</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid">
-        <!-- Backup & Health -->
-        <div class="card success">
-            <h2>Backup Status</h2>
-            <div class="metric">
-                <label>Last Local Commit</label>
-                <span>Mon Mar 9 17:02:37 2026</span>
-            </div>
-            <div class="metric">
-                <label>Last GitHub Push</label>
-                <span>Mon Mar 9 16:54:01 2026</span>
-            </div>
-            <div class="metric">
-                <label>Pending Commits</label>
-                <span>2</span>
-            </div>
-        </div>
-
-        <div class="card success">
-            <h2>System Health</h2>
-            <div class="metric">
-                <label>GitHub Connectivity</label>
-                <span class="success-text">Healthy (Verified)</span>
-            </div>
-            <div class="metric">
-                <label>Internal Agent Health</label>
-                <span class="success-text">All Systems Operational</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="diary">
-        <h2>Latest Diary Entries</h2>
-        <div class="log-entry">
-            <span class="timestamp">[2026-03-09 17:02:10]</span>
-            <span class="agent-name">[SystemCheckup]</span>
-            <span class="event-type">[AGENT_HEALTH]</span>
-            <span class="success-text">[SUCCESS]: All active agents (Diary, GitAgent, SlackBridge, SystemCheckup) reported heartbeat within the last 2 minutes.</span>
-        </div>
-        <div class="log-entry">
-            <span class="timestamp">[2026-03-09 17:02:00]</span>
-            <span class="agent-name">[SystemCheckup]</span>
-            <span class="event-type">[NETWORK_STATUS]</span>
-            <span class="success-text">[SUCCESS]: GitHub connectivity is healthy. git ls-remote origin successful.</span>
-        </div>
-        <div class="log-entry">
-            <span class="timestamp">[2026-03-09 17:01:23]</span>
-            <span class="agent-name">[GitAgent]</span>
-            <span class="event-type">[REPOSITORY_SYNC]</span>
-            <span class="success-text">[SUCCESS]: Added 1 local commit (Total 2 pending). Push threshold (5 commits / 30 mins) not met. No push performed.</span>
-        </div>
-        <div class="log-entry">
-            <span class="timestamp">[2026-03-09 17:01:45]</span>
-            <span class="agent-name">[Diary]</span>
-            <span class="event-type">[AGENT_HEARTBEAT]</span>
-            <span class="success-text">[SUCCESS]: System Chronicler awake and monitoring changes.</span>
-        </div>
-        <div class="log-entry">
-            <span class="timestamp">[2026-03-09 17:00:20]</span>
-            <span class="agent-name">[SlackBridge]</span>
-            <span class="event-type">[AGENT_ACTION]</span>
-            <span class="success-text">[PENDING]: Rover Agent starting task: slack_1773072020646.md</span>
-        </div>
-    </div>
 </body>
 </html>
