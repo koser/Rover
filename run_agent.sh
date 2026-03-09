@@ -45,5 +45,5 @@ while true; do
 
     $AI_ENGINE --yolo "$CORE_CONTEXT $SKILLS_CONTEXT" >> "$AGENT_LOG" 2>&1
     
-    sleep 120
+    sleep 600
 done
