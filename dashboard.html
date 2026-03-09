@@ -16,6 +16,7 @@
         .status { font-weight: bold; display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; text-transform: uppercase; }
         .status.active { background: #e8f5e9; color: #2e7d32; }
         .status.idle { background: #fff3e0; color: #ef6c00; }
+        .status.warning { background: #fff3e0; color: #ef6c00; }
         .metric { margin-bottom: 10px; }
         .metric label { font-weight: bold; color: #7f8c8d; font-size: 0.9rem; display: block; }
         .metric span { font-size: 1rem; color: #2c3e50; }
@@ -27,6 +28,7 @@
         .agent-name { font-weight: bold; color: #3498db; margin-right: 10px; }
         .event-type { color: #8e44ad; font-weight: bold; margin-right: 10px; }
         .success-text { color: #27ae60; }
+        .warning-text { color: #f39c12; }
     </style>
 </head>
 <body>
@@ -42,7 +44,7 @@
             </div>
             <div class="metric">
                 <label>Last Seen</label>
-                <span>2026-03-09 16:40:34</span>
+                <span>2026-03-09 16:45:00</span>
             </div>
             <div class="metric">
                 <label>Current Mission</label>
@@ -58,7 +60,7 @@
             </div>
             <div class="metric">
                 <label>Last Seen</label>
-                <span>2026-03-09 16:40:00</span>
+                <span>2026-03-09 16:42:49</span>
             </div>
             <div class="metric">
                 <label>Current Mission</label>
@@ -74,7 +76,7 @@
             </div>
             <div class="metric">
                 <label>Last Seen</label>
-                <span>2026-03-09 16:39:59</span>
+                <span>2026-03-09 16:43:19</span>
             </div>
             <div class="metric">
                 <label>Current Mission</label>
@@ -82,11 +84,11 @@
             </div>
         </div>
 
-        <div class="card success">
+        <div class="card warning">
             <h2>SlackBridge</h2>
             <div class="metric">
                 <label>Status</label>
-                <span class="status active">Active</span>
+                <span class="status warning">Warning</span>
             </div>
             <div class="metric">
                 <label>Last Seen</label>
@@ -105,7 +107,7 @@
             <h2>Backup Status</h2>
             <div class="metric">
                 <label>Last Local Commit</label>
-                <span>Mon Mar 9 16:38:55 2026</span>
+                <span>Mon Mar 9 16:42:49 2026</span>
             </div>
             <div class="metric">
                 <label>Last GitHub Push</label>
@@ -113,11 +115,11 @@
             </div>
             <div class="metric">
                 <label>Pending Commits</label>
-                <span>1</span>
+                <span>2</span>
             </div>
         </div>
 
-        <div class="card success">
+        <div class="card warning">
             <h2>System Health</h2>
             <div class="metric">
                 <label>GitHub Connectivity</label>
@@ -125,7 +127,7 @@
             </div>
             <div class="metric">
                 <label>Internal Agent Health</label>
-                <span class="success-text">All Systems Operational</span>
+                <span class="warning-text">Partial: SlackBridge Loop</span>
             </div>
         </div>
     </div>
@@ -133,28 +135,28 @@
     <div class="diary">
         <h2>Latest Diary Entries</h2>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:40:34]</span>
+            <span class="timestamp">[2026-03-09 16:45:00]</span>
             <span class="agent-name">[SystemCheckup]</span>
             <span class="event-type">[AGENT_HEALTH]</span>
-            <span class="success-text">[SUCCESS]: SystemCheckup cycle is healthy and performing its mission.</span>
+            <span class="success-text">[SUCCESS]: Connectivity audit completed successfully.</span>
         </div>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:40:34]</span>
+            <span class="timestamp">[2026-03-09 16:45:00]</span>
             <span class="agent-name">[SystemCheckup]</span>
             <span class="event-type">[NETWORK_STATUS]</span>
-            <span class="success-text">[SUCCESS]: GitHub connectivity verified via git ls-remote origin. GitAgent log shows no push failures.</span>
+            <span class="success-text">[SUCCESS]: GitHub connectivity confirmed via ls-remote.</span>
         </div>
         <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:40:00]</span>
-            <span class="agent-name">[GitAgent]</span>
-            <span class="event-type">[REPOSITORY_SYNC]</span>
-            <span class="success-text">[SUCCESS]: Committed 1 change(s). 1 pending. No push performed (threshold not met).</span>
-        </div>
-        <div class="log-entry">
-            <span class="timestamp">[2026-03-09 16:39:59]</span>
+            <span class="timestamp">[2026-03-09 16:43:19]</span>
             <span class="agent-name">[Diary]</span>
             <span class="event-type">[AGENT_HEARTBEAT]</span>
-            <span class="success-text">[SUCCESS]: Agent Diary wake-up cycle initiated.</span>
+            <span class="success-text">[SUCCESS]: Diary agent started wake-up cycle.</span>
+        </div>
+        <div class="log-entry">
+            <span class="timestamp">[2026-03-09 16:42:49]</span>
+            <span class="agent-name">[GitAgent]</span>
+            <span class="event-type">[REPOSITORY_SYNC]</span>
+            <span class="success-text">[SUCCESS]: Local repository sync complete. 2 commits pending push.</span>
         </div>
         <div class="log-entry">
             <span class="timestamp">[2026-03-09 16:39:16]</span>
