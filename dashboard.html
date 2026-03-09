@@ -150,18 +150,24 @@
                 </div>
                 <div class="card">
                     <div class="card-header"><span class="card-title">Diary Agent</span><span style="color: #666;">○ Idle</span></div>
-                    <p style="font-size: 0.85rem; color: #aaa;">Next run scheduled by Rover (24h cycle).</p>
+                    <p style="font-size: 0.85rem; color: #aaa;">Last seen: Mar 09 19:27:35 CET</p>
                 </div>
                 <div class="card">
                     <div class="card-header"><span class="card-title">GitAgent</span><span style="color: #666;">○ Idle</span></div>
-                    <p style="font-size: 0.85rem; color: #aaa;">Next run scheduled by Rover (24h cycle).</p>
+                    <p style="font-size: 0.85rem; color: #aaa;">Last run: Mar 09 20:30:22 CET</p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">SystemCheckup</span><span style="color: #666;">○ Idle</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Last seen: Mar 09 19:27:17 CET</p>
                 </div>
             </div>
 
             <h2 style="margin-top: 30px;">Repository Status</h2>
             <div class="card">
                 <p><strong>GitHub Connection:</strong> <span style="color: var(--accent-green);">HEALTHY</span></p>
-                <p><strong>Sync Status:</strong> <span style="color: var(--accent-blue);">MANAGED BY ROVER</span></p>
+                <p><strong>Sync Status:</strong> <span style="color: var(--accent-blue);">MANAGED BY ROVER (24h CYCLE)</span></p>
+                <p><strong>Last Local Commit:</strong> Mar 09 20:30:22 CET</p>
+                <p><strong>Last GitHub Push:</strong> Mar 09 20:18:44 CET</p>
             </div>
         </div>
 
@@ -169,36 +175,35 @@
         <div id="events" class="tab-content">
             <h2>System Action Log</h2>
             <div class="event-list">
-                <!-- Example entries - these would be updated by the Diary agent -->
                 <div class="event-item">
-                    <span class="event-ts">19:27:10</span>
-                    <span class="event-agent">[SystemCheckup]</span>
-                    <span class="event-type">[NETWORK]</span>
-                    <span class="event-msg">GitHub connectivity verified via ls-remote.</span>
-                </div>
-                <div class="event-item">
-                    <span class="event-ts">19:26:47</span>
-                    <span class="event-agent">[SlackBridge]</span>
-                    <span class="event-type">[USER_REQ]</span>
-                    <span class="event-msg">Received instruction: "make a tab in the dashboard..."</span>
-                </div>
-                <div class="event-item">
-                    <span class="event-ts">19:26:45</span>
-                    <span class="event-agent">[GitAgent]</span>
-                    <span class="event-type">[REPO_SYNC]</span>
-                    <span class="event-msg">Added local commit, pushed 5 commits to origin.</span>
-                </div>
-                <div class="event-item">
-                    <span class="event-ts">19:25:25</span>
+                    <span class="event-ts">20:31:34</span>
                     <span class="event-agent">[Rover]</span>
-                    <span class="event-type">[SCHEDULER]</span>
-                    <span class="event-msg">Checking 24h cycle status for support agents.</span>
+                    <span class="event-type">[FILE_EVENT]</span>
+                    <span class="event-msg">tasks/slack_1773082293171.md - CREATED</span>
                 </div>
                 <div class="event-item">
-                    <span class="event-ts">19:25:00</span>
-                    <span class="event-agent">[Diary]</span>
+                    <span class="event-ts">20:31:34</span>
+                    <span class="event-agent">[Rover]</span>
+                    <span class="event-type">[FILE_EVENT]</span>
+                    <span class="event-msg">tasks/00_scheduler.md - MODIFIED</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">20:31:34</span>
+                    <span class="event-agent">[Rover]</span>
+                    <span class="event-type">[FILE_EVENT]</span>
+                    <span class="event-msg">slack_listener.py - MODIFIED</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">20:31:28</span>
+                    <span class="event-agent">[Rover]</span>
                     <span class="event-type">[HEARTBEAT]</span>
-                    <span class="event-msg">System Chronicler awake and monitoring changes.</span>
+                    <span class="event-msg">Rover agent started wake-up cycle.</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">20:19:51</span>
+                    <span class="event-agent">[Rover]</span>
+                    <span class="event-type">[SMART_PUSH]</span>
+                    <span class="event-msg">Remote push to origin/main completed.</span>
                 </div>
             </div>
         </div>
