@@ -23,6 +23,13 @@ fi
 while true; do
     WAKE_MSG="--- [$AGENT_NAME] Waking Up: $(date +%H:%M:%S) ---"
     echo "$WAKE_MSG" >> "$HEARTBEAT_LOG"
+
+    # Optional: Announce Rover's arrival on Slack
+    if [ "$AGENT_NAME" == "Rover" ] && [ -n "$SLACK_WEBHOOK_URL" ]; then
+        curl -s -X POST -H 'Content-type: application/json' \
+             --data '{"text":"🤖 *Rover*: Coming back online"}' \
+             "$SLACK_WEBHOOK_URL" > /dev/null
+    fi
     
     # Load agent's full context (Persona, Mission, and Task)
     CORE_CONTEXT="Context: $(cat "$HOME/AgentService/GEMINI.md"). Agent Config: $(cat "$CONFIG_FILE"). Task: $(cat "$TASK_FILE")"
