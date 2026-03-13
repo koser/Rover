@@ -127,7 +127,7 @@
     <div class="container">
         <header>
             <h1>AgentService Dashboard</h1>
-            <div class="status-badge" style="background-color: var(--accent-orange);">SYSTEM ALERT</div>
+            <div class="status-badge">SYSTEM ACTIVE</div>
         </header>
 
         <div class="tabs">
@@ -154,10 +154,10 @@
                     <div class="card-header"><span class="card-title">Diary Agent</span><span class="active-dot">● Active</span></div>
                     <p style="font-size: 0.85rem; color: #aaa;">Last run: Mar 13 11:16:00 CET</p>
                 </div>
-                <div class="card" style="border: 1px solid var(--accent-orange);">
-                    <div class="card-header"><span class="card-title">GitAgent</span><span style="color: var(--accent-orange);">○ WARNING (OVERDUE)</span></div>
-                    <p style="font-size: 0.85rem; color: #aaa;">Last run: Mar 09 22:33:19 CET</p>
-                    <p style="font-size: 0.75rem; color: #ff9800;">Note: Agent has not run in 4 days.</p>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">GitAgent</span><span class="active-dot">● Active</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Mission: 24h repository backup & local versioning.</p>
+                    <p style="font-size: 0.75rem; color: #888;">Last run: Mar 13 11:45:00 CET</p>
                 </div>
                 <div class="card">
                     <div class="card-header"><span class="card-title">SystemCheckup</span><span class="active-dot">● Active</span></div>
@@ -169,8 +169,8 @@
             <div class="card">
                 <p><strong>GitHub Connection:</strong> <span style="color: var(--accent-green);">HEALTHY</span></p>
                 <p><strong>Sync Status:</strong> <span style="color: var(--accent-blue);">MANAGED BY ROVER (24h CYCLE)</span></p>
-                <p><strong>Last Local Commit:</strong> Mar 09 22:32:58 CET</p>
-                <p><strong>Last GitHub Push:</strong> Mar 09 22:20:36 CET</p>
+                <p><strong>Last Local Commit:</strong> Mar 13 11:38:32 CET</p>
+                <p><strong>Last GitHub Push:</strong> Mar 13 11:41:20 CET</p>
             </div>
         </div>
 
@@ -178,6 +178,18 @@
         <div id="events" class="tab-content">
             <h2>System Action Log</h2>
             <div class="event-list">
+                <div class="event-item">
+                    <span class="event-ts">11:45:05</span>
+                    <span class="event-agent">[GitAgent]</span>
+                    <span class="event-type">[REMOTE_PUSH]</span>
+                    <span class="event-msg">24h backup threshold met. Pushed 3 local commits to origin main.</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">11:45:00</span>
+                    <span class="event-agent">[GitAgent]</span>
+                    <span class="event-type">[REPO_SYNC]</span>
+                    <span class="event-msg">Local commit performed for dashboard.html. Status: ACTIVE.</span>
+                </div>
                 <div class="event-item">
                     <span class="event-ts">11:16:56</span>
                     <span class="event-agent">[SystemCheckup]</span>
