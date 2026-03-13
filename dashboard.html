@@ -127,7 +127,7 @@
     <div class="container">
         <header>
             <h1>AgentService Dashboard</h1>
-            <div class="status-badge">SYSTEM ACTIVE</div>
+            <div class="status-badge" style="background-color: var(--accent-orange);">SYSTEM ALERT</div>
         </header>
 
         <div class="tabs">
@@ -143,24 +143,25 @@
                 <div class="card">
                     <div class="card-header"><span class="card-title">Rover (Manager)</span><span class="active-dot">● Active</span></div>
                     <p style="font-size: 0.85rem; color: #aaa;">Mission: 24h cycle orchestration & scheduling.</p>
-                    <p style="font-size: 0.75rem; color: #888;">Last seen: Mar 09 22:19:45 CET</p>
+                    <p style="font-size: 0.75rem; color: #888;">Last seen: Mar 13 11:16:00 CET</p>
                 </div>
                 <div class="card">
                     <div class="card-header"><span class="card-title">SlackBridge</span><span class="active-dot">● Active</span></div>
                     <p style="font-size: 0.85rem; color: #aaa;">Mission: Real-time listener for @Rover mentions.</p>
-                    <p style="font-size: 0.75rem; color: #888;">Last seen: Mar 09 21:48:42 CET</p>
+                    <p style="font-size: 0.75rem; color: #888;">Last seen: Mar 13 11:15:00 CET</p>
                 </div>
                 <div class="card">
-                    <div class="card-header"><span class="card-title">Diary Agent</span><span style="color: #666;">○ Idle</span></div>
-                    <p style="font-size: 0.85rem; color: #aaa;">Last run: Mar 09 19:27:35 CET</p>
+                    <div class="card-header"><span class="card-title">Diary Agent</span><span class="active-dot">● Active</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Last run: Mar 13 11:16:00 CET</p>
+                </div>
+                <div class="card" style="border: 1px solid var(--accent-orange);">
+                    <div class="card-header"><span class="card-title">GitAgent</span><span style="color: var(--accent-orange);">○ WARNING (OVERDUE)</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Last run: Mar 09 22:33:19 CET</p>
+                    <p style="font-size: 0.75rem; color: #ff9800;">Note: Agent has not run in 4 days.</p>
                 </div>
                 <div class="card">
-                    <div class="card-header"><span class="card-title">GitAgent</span><span style="color: #666;">○ Idle</span></div>
-                    <p style="font-size: 0.85rem; color: #aaa;">Last run: Mar 09 21:32:48 CET</p>
-                </div>
-                <div class="card">
-                    <div class="card-header"><span class="card-title">SystemCheckup</span><span style="color: #666;">○ Idle</span></div>
-                    <p style="font-size: 0.85rem; color: #aaa;">Last seen: Mar 09 19:27:17 CET</p>
+                    <div class="card-header"><span class="card-title">SystemCheckup</span><span class="active-dot">● Active</span></div>
+                    <p style="font-size: 0.85rem; color: #aaa;">Last seen: Mar 13 11:24:00 CET</p>
                 </div>
             </div>
 
@@ -168,8 +169,8 @@
             <div class="card">
                 <p><strong>GitHub Connection:</strong> <span style="color: var(--accent-green);">HEALTHY</span></p>
                 <p><strong>Sync Status:</strong> <span style="color: var(--accent-blue);">MANAGED BY ROVER (24h CYCLE)</span></p>
-                <p><strong>Last Local Commit:</strong> Mar 09 22:07:39 CET</p>
-                <p><strong>Last GitHub Push:</strong> Mar 09 20:54:28 CET</p>
+                <p><strong>Last Local Commit:</strong> Mar 09 22:32:58 CET</p>
+                <p><strong>Last GitHub Push:</strong> Mar 09 22:20:36 CET</p>
             </div>
         </div>
 
@@ -178,34 +179,34 @@
             <h2>System Action Log</h2>
             <div class="event-list">
                 <div class="event-item">
-                    <span class="event-ts">22:19:45</span>
-                    <span class="event-agent">[Rover]</span>
+                    <span class="event-ts">11:16:56</span>
+                    <span class="event-agent">[SystemCheckup]</span>
                     <span class="event-type">[NETWORK_STATUS]</span>
-                    <span class="event-msg">Connectivity audit successful. GitHub reachable.</span>
+                    <span class="event-msg">GitHub connectivity confirmed (ls-remote verified). GitAgent log shows no recent push failures.</span>
                 </div>
                 <div class="event-item">
-                    <span class="event-ts">22:19:37</span>
-                    <span class="event-agent">[Rover]</span>
+                    <span class="event-ts">11:15:50</span>
+                    <span class="event-agent">[Diary]</span>
+                    <span class="event-type">[AGENT_ACTION]</span>
+                    <span class="event-msg">Observation cycle complete. System diary updated.</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">11:15:45</span>
+                    <span class="event-agent">[Diary]</span>
                     <span class="event-type">[FILE_EVENT]</span>
-                    <span class="event-msg">tasks/slack_1773080777293.md - CREATED</span>
+                    <span class="event-msg">logs/GitAgent.log (Mar 09 22:33:19) - MODIFIED</span>
                 </div>
                 <div class="event-item">
-                    <span class="event-ts">22:19:21</span>
-                    <span class="event-agent">[Rover]</span>
-                    <span class="event-type">[SCHEDULER_CHECK]</span>
-                    <span class="event-msg">Agent schedule check completed. All support agents within thresholds.</span>
-                </div>
-                <div class="event-item">
-                    <span class="event-ts">22:07:42</span>
-                    <span class="event-agent">[Rover]</span>
-                    <span class="event-type">[SCHEDULER_CHECK]</span>
-                    <span class="event-msg">Agent schedule check completed. Remote push successful.</span>
-                </div>
-                <div class="event-item">
-                    <span class="event-ts">21:54:42</span>
-                    <span class="event-agent">[Rover]</span>
+                    <span class="event-ts">11:15:40</span>
+                    <span class="event-agent">[Diary]</span>
                     <span class="event-type">[FILE_EVENT]</span>
-                    <span class="event-msg">tasks/slack_1773089244536.md - CREATED</span>
+                    <span class="event-msg">logs/agent_schedule.json (Mar 09 22:32:56) - MODIFIED</span>
+                </div>
+                <div class="event-item">
+                    <span class="event-ts">11:15:40</span>
+                    <span class="event-agent">[Diary]</span>
+                    <span class="event-type">[FILE_EVENT]</span>
+                    <span class="event-msg">dashboard.html (Mar 09 22:20:20) - MODIFIED</span>
                 </div>
             </div>
         </div>
